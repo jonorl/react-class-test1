@@ -21,7 +21,6 @@ const FunctionalInput = ({ name }) => {
   };
 
   const handleDelete = (e) => {
-
     const filteredArray = todos.filter(task => task !== e.target.previousSibling.data);
     setTodos([...filteredArray]);
   };
