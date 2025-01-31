@@ -9,6 +9,7 @@ const FunctionalInput = ({ name }) => {
   */
   const [todos, setTodos] = useState(['Just some demo tasks', 'As an example']);
   const [inputVal, setInputVal] = useState('');
+  const [count, setCount] = useState(todos.length)
 
   const handleInputChange = (e) => {
     setInputVal(e.target.value);
@@ -18,12 +19,15 @@ const FunctionalInput = ({ name }) => {
     e.preventDefault();
     setTodos((todo) => [...todo, inputVal]);
     setInputVal('');
+    return todos
   };
 
   const handleDelete = (e) => {
     const filteredArray = todos.filter(task => task !== e.target.previousSibling.data);
     setTodos([...filteredArray]);
+    return todos
   };
+
 
   return (
     <section>
@@ -41,6 +45,7 @@ const FunctionalInput = ({ name }) => {
         <button type="submit">Submit</button>
       </form>
       <h4>All the tasks!</h4>
+      <h4>Count: {todos.length}</h4>
       {/* The list of all the To-Do's, displayed */}
       <ul>
         {todos.map((todo) => (
