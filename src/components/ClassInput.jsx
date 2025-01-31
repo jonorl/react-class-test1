@@ -8,11 +8,13 @@ class ClassInput extends Component {
     this.state = {
       todos: ['Just some demo tasks', 'As an example'],
       inputVal: '',
+      count: 2,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleCount= this.handleCount.bind(this);
   }
 
   handleInputChange(e) {
@@ -28,15 +30,25 @@ class ClassInput extends Component {
       todos: state.todos.concat(state.inputVal),
       inputVal: '',
     }));
+    this.handleCount()
   }
 
   handleDelete(e) {
     this.setState((state) => ({
     todos: state.todos.filter(task => task !== e.target.previousSibling.data),
   }));
+  this.handleCount()
   };
 
+  handleCount() {
+    this.setState((state) => ({
+    count: state.todos.length
+    }))
+  }
+
+
   render() {
+    console.log(this.state.count)
     return (
       <section>
         {/* eslint-disable-next-line react/prop-types */}
@@ -54,6 +66,7 @@ class ClassInput extends Component {
           <button type="submit">Submit</button>
         </form>
         <h4>All the tasks!</h4>
+        <h4>Count: {this.state.count}</h4>
         {/* The list of all the To-Do's, displayed */}
         <ul>
           {this.state.todos.map((todo) => (
