@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 
 class ClassInput extends Component {
@@ -55,7 +54,7 @@ class ClassInput extends Component {
     this.setState((state) => ({
       ...state,
       editInputValue: state.todos.text,
-      todos: state.todos.map(todo  =>
+      todos: state.todos.map(todo =>
         todoText === todo.text
           ? { ...todo, edit: !todo.edit }
           : todo
@@ -79,11 +78,9 @@ class ClassInput extends Component {
   render() {
     return (
       <section>
-        {/* eslint-disable-next-line react/prop-types */}
         <h3>{this.props.name}</h3>
         {/* The input field to enter To-Do's */}
         <form onSubmit={this.handleSubmit}>
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label htmlFor="task-entry">Enter a task: </label>
           <input
             type="text"
@@ -97,7 +94,6 @@ class ClassInput extends Component {
         <h4>Count: {this.state.count}</h4>
         {/* The list of all the To-Do's, displayed */}
         <ul>
-          {console.log(this.state.todos)}
           {this.state.todos.map((todo, index) => (
             todo.edit ? (
               <li key={index}>{todo.text}
@@ -106,7 +102,7 @@ class ClassInput extends Component {
               </li>
             ) : (
               <li key={index}>
-                <input type="text" name="task-edit" value={todo.text} onChange={(e) => this.handleResubmit(e, index)}/>
+                <input type="text" name="task-edit" value={todo.text} onChange={(e) => this.handleResubmit(e, index)} />
                 <button onClick={(e) => this.handleEdit(e, todo.text)} type={todo.edit ? 'edit' : 'resubmit'}>{todo.edit ? 'Edit' : 'Resubmit'}</button>
                 <button onClick={this.handleDelete} type="delete">Delete</button>
               </li>

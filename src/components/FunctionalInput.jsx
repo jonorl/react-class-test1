@@ -7,9 +7,12 @@ const FunctionalInput = ({ name }) => {
     one to store the To-Do's
     and the other to store the value of the input field
   */
-  const [todos, setTodos] = useState(['Just some demo tasks', 'As an example']);
+  const [todos, setTodos] = useState([
+    {id: 1, text: 'Just some demo tasks'},
+    {id: 2, text: 'As an example'},
+    ]);
   const [inputVal, setInputVal] = useState('');
-  const [count, setCount] = useState(todos.length)
+  const [edit, setEdit] = useState(true)
 
   const handleInputChange = (e) => {
     setInputVal(e.target.value);
@@ -17,23 +20,30 @@ const FunctionalInput = ({ name }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setTodos((todo) => [...todo, inputVal]);
+    // setTodos({ ...todos, text: inputVal })
+    setTodos((todo) => [...todo, { id:todos.length+1, text: inputVal}]);
     setInputVal('');
+    console.log(todos)
     return todos
   };
 
   const handleDelete = (e) => {
-    const filteredArray = todos.filter(task => task !== e.target.previousSibling.data);
+    console.log(e.target.previousSibling.previousSibling.previousSibling.previousSibling.data)
+    const filteredArray = todos.filter(task => task.text !== e.target.previousSibling.previousSibling.previousSibling.previousSibling.data);
     setTodos([...filteredArray]);
     return todos
   };
+
+  const handleEdit = () => {
+    setEdit(!(edit))
+  }
 
 
   return (
     <section>
       <h3>{name}</h3>
       {/* The input field to enter To-Do's */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmit(e)}>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label htmlFor="task-entry">Enter a task: </label>
         <input
@@ -49,7 +59,7 @@ const FunctionalInput = ({ name }) => {
       {/* The list of all the To-Do's, displayed */}
       <ul>
         {todos.map((todo) => (
-          <li key={todo}>{todo}<button onClick={handleDelete} type="delete">Delete</button></li>
+          <li key={todo.id}>{edit ? todo.text : <input type="text" name="task-edit" value={todo.text} /> } {edit ? <button onClick={handleEdit} type="edit">Edit</button> : <button onClick={handleEdit} type="resubmit">Resubmit</button>}  <button onClick={handleDelete} type="delete">Delete</button></li>
         ))}
       </ul>
     </section>
