@@ -9,12 +9,15 @@ class ClassInput extends Component {
       todos: ['Just some demo tasks', 'As an example'],
       inputVal: '',
       count: 2,
+      triggerEdit: true,
+      editInputValue: ''
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleCount= this.handleCount.bind(this);
+    this.handleEdit= this.handleEdit.bind(this);
   }
 
   handleInputChange(e) {
@@ -46,6 +49,16 @@ class ClassInput extends Component {
     }))
   }
 
+  handleEdit(e) {
+    console.log(e.target)
+    // Maybe a conditional?
+    this.setState((state) => ({
+      ...state,
+      triggerEdit: !(this.state.triggerEdit),
+      editInputValue: this.state.todos,
+    }));
+  }
+
 
   render() {
     console.log(this.state.count)
@@ -70,9 +83,21 @@ class ClassInput extends Component {
         {/* The list of all the To-Do's, displayed */}
         <ul>
           {this.state.todos.map((todo) => (
-            <li key={todo}>{todo}<button onClick={this.handleDelete} type="delete">Delete</button></li>
+            this.state.triggerEdit ? (
+            <li key={todo}>{todo}
+            <button onClick={this.handleEdit} type={this.state.triggerEdit ? 'edit' : 'resubmit'}>{this.state.triggerEdit ? 'Edit' : 'Resubmit'}</button>
+            <button onClick={this.handleDelete} type="delete">Delete</button>
+            </li>
+            ) : (
+            <li>
+              <input type="text" name="task-edit" value={todo} />
+              <button onClick={this.handleEdit} type={this.state.triggerEdit ? 'edit' : 'resubmit'}>{this.state.triggerEdit ? 'Edit' : 'Resubmit'}</button>
+              <button onClick={this.handleDelete} type="delete">Delete</button>
+            </li>
+          )  
           ))}
         </ul>
+        
       </section>
     );
   }
