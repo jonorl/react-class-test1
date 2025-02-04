@@ -8,34 +8,48 @@ const FunctionalInput = ({ name }) => {
     and the other to store the value of the input field
   */
   const [todos, setTodos] = useState([
-    {id: 1, text: 'Just some demo tasks'},
-    {id: 2, text: 'As an example'},
+    {id: 1, text: 'Just some demo tasks', edit:true},
+    {id: 2, text: 'As an example', edit:true},
     ]);
   const [inputVal, setInputVal] = useState('');
-  const [edit, setEdit] = useState(true)
+  const [editVal, setEditVal] = useState('')
 
   const handleInputChange = (e) => {
     setInputVal(e.target.value);
   };
 
+  const handleEditChange = (e, indexedKey) => {
+
+    setTodos(todos.map(todo =>
+      todo.id === indexedKey+1 ? { ...todo, text: e.target.value } : todo
+    ));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // setTodos({ ...todos, text: inputVal })
-    setTodos((todo) => [...todo, { id:todos.length+1, text: inputVal}]);
+
+    setTodos((todo) => [...todo, { id:todos.length+1, text: inputVal, edit:true}]);
     setInputVal('');
     console.log(todos)
     return todos
   };
 
   const handleDelete = (e) => {
-    console.log(e.target.previousSibling.previousSibling.previousSibling.previousSibling.data)
-    const filteredArray = todos.filter(task => task.text !== e.target.previousSibling.previousSibling.previousSibling.previousSibling.data);
-    setTodos([...filteredArray]);
+    if (typeof(e.target.previousSibling.previousSibling.previousSibling.previousSibling.data) === "undefined"){
+    const filteredArray = todos.filter(task => task.text !== e.target.previousSibling.previousSibling.previousSibling.previousSibling.value);
+    setTodos([...filteredArray]);}
+    else {const filteredArray = todos.filter(task => task.text !== e.target.previousSibling.previousSibling.previousSibling.previousSibling.data);
+      setTodos([...filteredArray]);
+    }
+
     return todos
   };
 
-  const handleEdit = () => {
-    setEdit(!(edit))
+  const handleEdit = (e, indexedKey) => {
+    setTodos(todos.map(todo =>
+      todo.id === indexedKey+1 ? { ...todo, edit: !todo.edit } : todo
+    ));
+
   }
 
 
@@ -58,8 +72,8 @@ const FunctionalInput = ({ name }) => {
       <h4>Count: {todos.length}</h4>
       {/* The list of all the To-Do's, displayed */}
       <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>{edit ? todo.text : <input type="text" name="task-edit" value={todo.text} /> } {edit ? <button onClick={handleEdit} type="edit">Edit</button> : <button onClick={handleEdit} type="resubmit">Resubmit</button>}  <button onClick={handleDelete} type="delete">Delete</button></li>
+        {todos.map((todo, index) => (
+          <li key={todo.id}>{todo.edit ? todo.text : <input type="text" name="task-edit" value={todo.text} onChange={(e) => handleEditChange(e, index)}  /> } {todo.edit ? <button onClick={(e) => handleEdit(e, index)} type="edit">Edit</button> : <button onClick={(e) => handleEdit(e, index)} type="resubmit">Resubmit</button>}  <button onClick={handleDelete} type="delete">Delete</button></li>
         ))}
       </ul>
     </section>
