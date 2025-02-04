@@ -8,11 +8,10 @@ const FunctionalInput = ({ name }) => {
     and the other to store the value of the input field
   */
   const [todos, setTodos] = useState([
-    {id: 1, text: 'Just some demo tasks', edit:true},
-    {id: 2, text: 'As an example', edit:true},
+    {id: 0, text: 'Just some demo tasks', edit:true},
+    {id: 1, text: 'As an example', edit:true},
     ]);
   const [inputVal, setInputVal] = useState('');
-  const [editVal, setEditVal] = useState('')
 
   const handleInputChange = (e) => {
     setInputVal(e.target.value);
@@ -21,14 +20,14 @@ const FunctionalInput = ({ name }) => {
   const handleEditChange = (e, indexedKey) => {
 
     setTodos(todos.map(todo =>
-      todo.id === indexedKey+1 ? { ...todo, text: e.target.value } : todo
+      todo.id === indexedKey ? { ...todo, text: e.target.value } : todo
     ));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setTodos((todo) => [...todo, { id:todos.length+1, text: inputVal, edit:true}]);
+    setTodos((todo) => [...todo, { id:todos.length, text: inputVal, edit:true}]);
     setInputVal('');
     console.log(todos)
     return todos
@@ -47,11 +46,10 @@ const FunctionalInput = ({ name }) => {
 
   const handleEdit = (e, indexedKey) => {
     setTodos(todos.map(todo =>
-      todo.id === indexedKey+1 ? { ...todo, edit: !todo.edit } : todo
+      todo.id === indexedKey ? { ...todo, edit: !todo.edit } : todo
     ));
 
   }
-
 
   return (
     <section>
@@ -73,7 +71,7 @@ const FunctionalInput = ({ name }) => {
       {/* The list of all the To-Do's, displayed */}
       <ul>
         {todos.map((todo, index) => (
-          <li key={todo.id}>{todo.edit ? todo.text : <input type="text" name="task-edit" value={todo.text} onChange={(e) => handleEditChange(e, index)}  /> } {todo.edit ? <button onClick={(e) => handleEdit(e, index)} type="edit">Edit</button> : <button onClick={(e) => handleEdit(e, index)} type="resubmit">Resubmit</button>}  <button onClick={handleDelete} type="delete">Delete</button></li>
+          <li key={todo.id}>{todo.edit ? todo.text : <input type="text" name="task-edit" value={todo.text} onChange={(e) => handleEditChange(e, todo.id)}  /> } {todo.edit ? <button data-value={todo.id} onClick={(e) => handleEdit(e, todo.id)} type="edit">Edit</button> : <button data-value={todo.id} onClick={(e) => handleEdit(e, todo.id)} type="resubmit">Resubmit</button>}  <button data-value={todo.id} onClick={handleDelete} type="delete">Delete</button></li>
         ))}
       </ul>
     </section>
